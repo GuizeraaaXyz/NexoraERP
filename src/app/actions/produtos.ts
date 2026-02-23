@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getCurrentPlanContext } from "@/lib/billing/plan-access";
 
 export async function createProduto(values: Record<string, unknown>) {
   const supabase = await createSupabaseServerClient();
@@ -12,6 +13,21 @@ export async function createProduto(values: Record<string, unknown>) {
   }
 
   const payload = values;
+
+  const planContext = await getCurrentPlanContext();
+  const maxProducts = planContext.plan.limits.maxProducts;
+  if (Number.isFinite(maxProducts)) {
+    const { count, error: countError } = await supabase
+      .from("produtos")
+      .select("id", { count: "exact", head: true });
+
+    if (countError) return { error: countError.message };
+    if ((count ?? 0) >= maxProducts) {
+      return {
+        error: `Limite do plano Starter atingido (${maxProducts} produtos). Faça upgrade para o Pro.`,
+      };
+    }
+  }
 
   const { error } = await supabase.from("produtos").insert(payload);
   if (error) return { error: error.message };

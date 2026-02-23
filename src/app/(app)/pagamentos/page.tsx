@@ -1,9 +1,37 @@
-﻿import { getPagamentos, getPedidos } from "@/lib/data/lookup";
+import Link from "next/link";
+import { getPagamentos, getPedidos } from "@/lib/data/lookup";
 import { PageHeader, Card, Badge } from "@/components/ui/kit";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { PagamentoForm } from "./_components/PagamentoForm";
+import { getCurrentPlanContext } from "@/lib/billing/plan-access";
 
 export default async function PagamentosPage() {
+  const planContext = await getCurrentPlanContext();
+
+  if (!planContext.plan.features.financialModule) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Pagamentos"
+          subtitle="Registro manual das formas de pagamento."
+        />
+        <Card className="space-y-3">
+          <div className="text-base font-semibold text-slate-900">
+            Recurso disponivel apenas no plano Pro
+          </div>
+          <div className="text-sm text-slate-600">
+            O plano Starter nao inclui modulo Financeiro/Pagamentos.
+          </div>
+          <div>
+            <Link href="/billing" className="erp-button primary">
+              Fazer upgrade para Pro
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   const [pagamentos, pedidos] = await Promise.all([getPagamentos(), getPedidos()]);
 
   return (

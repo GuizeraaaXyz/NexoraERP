@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getCurrentPlanContext } from "@/lib/billing/plan-access";
 
 const MANAGER_ROLES = new Set(["owner", "admin"]);
 const ALLOWED_ROLES = new Set(["admin", "financeiro", "vendedor"]);
@@ -44,6 +45,23 @@ export async function convidarMembro(formData: FormData) {
 
   if (!MANAGER_ROLES.has(context.membership.papel)) {
     return { error: "Sem permissao para convidar membros." };
+  }
+
+  const planContext = await getCurrentPlanContext();
+  const maxActiveMembers = planContext.plan.limits.maxActiveMembers;
+  if (Number.isFinite(maxActiveMembers)) {
+    const { count, error: countError } = await context.supabase
+      .from("empresa_membros")
+      .select("id", { count: "exact", head: true })
+      .eq("empresa_id", context.membership.empresa_id)
+      .eq("status", "ativo");
+
+    if (countError) return { error: countError.message };
+    if ((count ?? 0) >= maxActiveMembers) {
+      return {
+        error: `Limite do plano Starter atingido (${maxActiveMembers} membros ativos). Faça upgrade para o Pro.`,
+      };
+    }
   }
 
   const { error } = await context.supabase.from("convites_empresa").insert({

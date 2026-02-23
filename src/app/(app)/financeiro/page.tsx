@@ -1,8 +1,36 @@
-﻿import { getContasReceber } from "@/lib/data/lookup";
+import Link from "next/link";
+import { getContasReceber } from "@/lib/data/lookup";
 import { PageHeader, Card } from "@/components/ui/kit";
 import { FinanceFilter } from "./_components/FinanceFilter";
+import { getCurrentPlanContext } from "@/lib/billing/plan-access";
 
 export default async function FinanceiroPage() {
+  const planContext = await getCurrentPlanContext();
+
+  if (!planContext.plan.features.financialModule) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Financeiro"
+          subtitle="Contas a receber e acompanhamento de saldo."
+        />
+        <Card className="space-y-3">
+          <div className="text-base font-semibold text-slate-900">
+            Recurso disponivel apenas no plano Pro
+          </div>
+          <div className="text-sm text-slate-600">
+            No Starter, voce pode operar vendas, clientes e estoque. Para liberar o Financeiro, faca upgrade.
+          </div>
+          <div>
+            <Link href="/billing" className="erp-button primary">
+              Fazer upgrade para Pro
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   const contas = await getContasReceber();
 
   return (

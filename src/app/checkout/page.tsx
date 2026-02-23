@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { criarCheckoutPublico } from "@/app/actions/billing";
+import { PLAN_DEFINITIONS } from "@/lib/billing/plan-definitions";
 
 export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +51,11 @@ export default function CheckoutPage() {
             >
               <div className="font-semibold text-slate-900">Starter</div>
               <div className="text-slate-600">R$ 79 / mes</div>
+              <ul className="mt-3 list-disc pl-5 text-xs text-slate-600 space-y-1">
+                {PLAN_DEFINITIONS.starter.highlights.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
             </button>
             <button
               type="button"
@@ -60,6 +66,11 @@ export default function CheckoutPage() {
             >
               <div className="font-semibold text-slate-900">Pro</div>
               <div className="text-slate-600">R$ 149 / mes</div>
+              <ul className="mt-3 list-disc pl-5 text-xs text-slate-600 space-y-1">
+                {PLAN_DEFINITIONS.pro.highlights.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
             </button>
           </div>
 

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getCurrentPlanContext } from "@/lib/billing/plan-access";
 
 export async function createPagamento(input: {
   pedido_id: string;
@@ -10,6 +11,11 @@ export async function createPagamento(input: {
   status: "pendente" | "pago";
   data_pagamento?: string;
 }) {
+  const planContext = await getCurrentPlanContext();
+  if (!planContext.plan.features.financialModule) {
+    return { error: "Modulo Financeiro disponivel apenas no plano Pro." };
+  }
+
   const supabase = await createSupabaseServerClient();
   const { data: user } = await supabase.auth.getUser();
   if (!user.user) return { error: "Usuário não autenticado." };

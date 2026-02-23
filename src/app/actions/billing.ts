@@ -13,7 +13,7 @@ function getMercadoPagoCheckoutError(error: unknown) {
   if (normalized.includes("unauthorized")) {
     return "Credenciais Mercado Pago invalidas.";
   }
-  return "Falha ao iniciar checkout Mercado Pago. Tente novamente em instantes.";
+  return `Falha ao iniciar checkout Mercado Pago: ${error.message}`;
 }
 
 async function createPendingCompanyCheckout(
@@ -129,6 +129,7 @@ export async function criarCheckoutAssinatura(formData: FormData) {
       status: "pending",
     });
   } catch (error) {
+    console.error("Mercado Pago checkout error (assinatura):", error);
     const checkoutError = getMercadoPagoCheckoutError(error);
     return { error: checkoutError ?? "Falha ao criar checkout." };
   }
@@ -187,6 +188,7 @@ export async function criarCheckoutPublico(formData: FormData) {
       status: "pending",
     });
   } catch (error) {
+    console.error("Mercado Pago checkout error (publico):", error);
     const checkoutError = getMercadoPagoCheckoutError(error);
     return { error: checkoutError ?? "Falha ao iniciar checkout." };
   }

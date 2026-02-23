@@ -2,6 +2,7 @@ import { Card, PageHeader, Badge } from "@/components/ui/kit";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { criarCheckoutAssinatura } from "@/app/actions/billing";
 import { formatCurrency } from "@/lib/format";
+import { PLAN_DEFINITIONS, normalizePlanId } from "@/lib/billing/plan-definitions";
 
 function statusLabel(status: string | null | undefined) {
   if (status === "active") return { text: "Ativa", tone: "success" as const };
@@ -62,10 +63,20 @@ export default async function BillingPage() {
         <div className="grid gap-3 md:grid-cols-2">
           {(planos ?? []).map((plano) => (
             <div key={plano.id} className="rounded-lg border border-slate-200 p-4 space-y-3">
-              <div className="text-lg font-semibold text-slate-900">{plano.nome}</div>
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-lg font-semibold text-slate-900">{plano.nome}</div>
+                {normalizePlanId(assinatura?.plano_id) === normalizePlanId(plano.id) ? (
+                  <Badge tone="success">Plano atual</Badge>
+                ) : null}
+              </div>
               <div className="text-slate-600">
                 {formatCurrency(Number(plano.preco_mensal_centavos) / 100)} / mes
               </div>
+              <ul className="list-disc pl-5 text-sm text-slate-600 space-y-1">
+                {PLAN_DEFINITIONS[normalizePlanId(plano.id)].highlights.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
               <form action={onCheckout}>
                 <input type="hidden" name="plan_id" value={plano.id} />
                 <button className="erp-button primary" type="submit">

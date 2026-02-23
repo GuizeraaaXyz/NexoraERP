@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { PLAN_DEFINITIONS } from "@/lib/billing/plan-definitions";
 
 export default function MarketingHomePage() {
   return (
@@ -48,10 +49,16 @@ export default function MarketingHomePage() {
               <div className="rounded-xl bg-slate-50 p-4">
                 <div className="font-semibold text-slate-900">Starter</div>
                 <div className="text-slate-600">R$ 79 / mes</div>
+                <div className="mt-2 text-xs text-slate-500">
+                  Ate {PLAN_DEFINITIONS.starter.limits.maxActiveMembers} membros e sem Financeiro.
+                </div>
               </div>
               <div className="rounded-xl bg-slate-50 p-4">
                 <div className="font-semibold text-slate-900">Pro</div>
                 <div className="text-slate-600">R$ 149 / mes</div>
+                <div className="mt-2 text-xs text-slate-500">
+                  Modulo Financeiro e operacao sem limite de membros/produtos.
+                </div>
               </div>
             </div>
           </div>
