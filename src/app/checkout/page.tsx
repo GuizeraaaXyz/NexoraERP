@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { criarCheckoutPublico } from "@/app/actions/billing";
 
@@ -26,9 +27,11 @@ export default function CheckoutPage() {
         </div>
         <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-8 space-y-6">
           <div>
-            <img
+            <Image
               src="/brand/nexora-logo.png"
               alt="Nexora ERP"
+              width={220}
+              height={56}
               className="h-12 w-auto object-contain"
             />
             <h1 className="text-2xl font-semibold text-slate-900 mt-3">Assinar</h1>

@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/supabase/actions";
@@ -19,9 +20,11 @@ export default function LoginPage() {
   return (
     <div className="space-y-6">
       <div>
-        <img
+        <Image
           src="/brand/nexora-logo.png"
           alt="Nexora ERP"
+          width={220}
+          height={56}
           className="h-12 w-auto object-contain"
         />
         <p className="text-sm text-slate-500 mt-1">

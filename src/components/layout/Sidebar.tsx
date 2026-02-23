@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutGrid,
@@ -37,9 +38,11 @@ export function Sidebar() {
   return (
     <aside className="erp-sidebar">
       <div className="px-5 py-6 border-b border-slate-800">
-        <img
+        <Image
           src="/brand/nexora-logo.png"
           alt="Nexora ERP"
+          width={240}
+          height={64}
           className="h-14 w-auto object-contain"
         />
       </div>

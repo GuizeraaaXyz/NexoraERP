@@ -1,13 +1,16 @@
-﻿import Link from "next/link";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function MarketingHomePage() {
   return (
     <main className="min-h-screen bg-[radial-gradient(1200px_500px_at_10%_-10%,#dbeafe,transparent),radial-gradient(1000px_500px_at_90%_0%,#fee2e2,transparent),#f8fafc]">
       <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
         <header className="flex items-center justify-between">
-          <img
+          <Image
             src="/brand/nexora-logo.png"
             alt="Nexora ERP"
+            width={220}
+            height={56}
             className="h-12 w-auto object-contain"
           />
           <div className="flex items-center gap-3">
@@ -57,4 +60,3 @@ export default function MarketingHomePage() {
     </main>
   );
 }
-

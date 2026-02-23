@@ -426,7 +426,7 @@ export default async function AdminPage({
             <tbody>
               {authUsersList.map((user) => {
                 const bannedUntil = user.banned_until ? new Date(user.banned_until) : null;
-                const isBanned = bannedUntil ? bannedUntil.getTime() > Date.now() : false;
+                const isBanned = Boolean(user.banned_until);
 
                 return (
                   <tr key={user.id}>

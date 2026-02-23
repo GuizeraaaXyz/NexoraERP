@@ -156,8 +156,7 @@ export default function AdminSummaryTable({
                   </thead>
                   <tbody>
                     {usuarios.slice(0, 5).map((user, index) => {
-                      const bannedUntil = user.banned_until ? new Date(user.banned_until) : null;
-                      const isBanned = bannedUntil ? bannedUntil.getTime() > Date.now() : false;
+                      const isBanned = Boolean(user.banned_until);
                       return (
                         <tr key={`${user.email ?? "user"}-${index}`}>
                           <td className="font-mono text-slate-700">{user.email ?? "-"}</td>
